@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -30,6 +29,12 @@ public class SnakeTail : MonoBehaviour
             tail.Add(auxBlockTail);
             tail.Last().transform.position = snakeHead.lastPosition;
         }
+    }
+
+    public void Reset()
+    {
+        foreach (GameObject go in tail) Destroy(go);
+        tail.Clear();
     }
     
 }

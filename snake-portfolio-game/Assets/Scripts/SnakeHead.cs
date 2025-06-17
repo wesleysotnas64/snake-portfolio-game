@@ -11,16 +11,15 @@ public class SnakeHead : MonoBehaviour
 
     private SnakeTail snakeTail;
     private Food food;
+    private SceneController sceneController;
 
     void Start()
     {
-        live = true;
-        currentTimeStap = 0.0f;
-        currentDirection = Vector2.zero;
-        lastDirection = Vector2.zero;
+        Reset();
 
         snakeTail = GameObject.Find("SnakeTail").GetComponent<SnakeTail>();
         food = GameObject.Find("Food").GetComponent<Food>();
+        sceneController = GameObject.Find("SceneController").GetComponent<SceneController>();
     }
 
     void Update()
@@ -59,19 +58,35 @@ public class SnakeHead : MonoBehaviour
     {
         snakeTail.Grow();
         food.SetNewPosition();
+        sceneController.Scored();
+    }
+
+    public void Dead()
+    {
+        live = false;
+        sceneController.GameOver();
+    }
+
+    public void Reset()
+    {
+        live = true;
+        currentTimeStap = 0.0f;
+        currentDirection = Vector2.zero;
+        lastDirection = Vector2.zero;
+        lastPosition = Vector2.zero;
+        transform.position = Vector3.zero;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Enter in trigger area.");
         switch (collision.gameObject.tag)
         {
             case "Tail":
-                live = false;
+                Dead();
                 break;
 
             case "Wall":
-                live = false;
+                Dead();
                 break;
 
             case "Food":
